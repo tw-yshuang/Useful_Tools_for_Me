@@ -100,36 +100,6 @@ def get_biggest_countour(img, isShow=False):
     return biggest_contour
 
 
-def remove_black_frame(img, contour, isShow=False):
-    feature = calc_contour_feature(img, contour)
-    x, y, w, h = feature[0][3]
-    img_center = [int(img.shape[0]/2)+1, int(img.shape[1]/2)+1]
-
-    if img_center[0] > y:
-        w = (img_center[1] - x) * 2 - 2
-        h = (img_center[0] - y) * 2 - 2
-        feature[0][3] = (x, y, w, h)
-    else:
-        x += w
-        y += h
-        w = (x - (img_center[1])) * 2 - 2
-        h = (y - (img_center[0])) * 2 - 2
-        feature[0][3] = (2*img_center[1] - x, 2*img_center[0] - y, w, h)
-
-    img = get_crop_img_list(
-        img, feature, extra_W=-1, extra_H=-1, isShow=False)[0]
-    new_img = np.ones(
-        (img.shape[0]+2, img.shape[1]+2), dtype='uint8') * 255
-    new_img[1:-1, 1:-1] = img
-
-    if isShow:
-        cv2.imshow('remove_black_frame', new_img)
-        # cv2.waitKey(0)
-        if cv2.waitKey(1) & 0xFF == ord('q'):
-            pass
-    return new_img
-
-
 def remove_img_nosie(img, contours, isShow=False):
     '''
         Only save contours part, else place become back.
