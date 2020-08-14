@@ -70,6 +70,19 @@ def get_square_img(img):
     return output_img
 
 
+def get_contours_binary(img):
+    imgray = cv2.cvtColor(img, cv2.COLOR_BGR2GRAY)
+    print(type(imgray))
+    ret, thresh = cv2.threshold(imgray, 127, 255, 0)
+    thresh_white = 255 - thresh
+
+    # if your python-cv version is less than 4.0 the cv2.findContours will return 3 variable
+    _, contours, hierarchy = cv2.findContours(
+        thresh_white, cv2.RETR_TREE, cv2.CHAIN_APPROX_NONE)
+
+    return contours
+
+
 def get_biggest_countour(img, isShow=False):
     contours = get_contours_binary(img, THRESH_VALUE=100, whiteGround=False)
     new_contours = []

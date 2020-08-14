@@ -1,19 +1,31 @@
 from os import walk
 from os import mknod
 import glob
+'''
+    This code edit by YU-SHUN from NTUT IEM,
+    if have any problem, please contact this e-mail: t105370742@ntut.org.tw.
+'''
 
 
-def get_filenames(path, file_extension, isImported=False):
-    file_extension = '/*.{}'.format(file_extension)
+def get_filenames(path, specific_name, isImported=False):
+    '''
+        This function can find any specific name under the path, even the file inside directories under the path.
+        -----
+        `specific_name`: 
+        --
+        >>> Can type any word or extension. 
+        e.g. '*cat*', '.csv', '*cat*.csv'
+    '''
+    specific_name = '/*{}'.format(specific_name)
     filenames = []
-    
+
     if isImported is True:
         imported_root_ls = read_imported_root_from_txt()
     else:
         imported_root_ls = []
 
     for root, dirs, file in walk(path):
-        load_filenames = glob.glob(root + file_extension)
+        load_filenames = glob.glob(root + specific_name)
 
         if imported_root_ls == ['']:
             if len(load_filenames) == 1:
@@ -30,7 +42,7 @@ def get_filenames(path, file_extension, isImported=False):
                 if(check_num == 1):
                     continue
                 filenames.append(filename)
-                
+
     return filenames
 
 
@@ -41,7 +53,7 @@ def read_imported_root_from_txt():
     except FileNotFoundError:
         mknod(path)
         imported_root_info = []
-    
+
     imported_root_ls = seprate_data_item(imported_root_info, ",\n")
     return imported_root_ls
 
@@ -66,8 +78,8 @@ def write_imported_root_to_txt(filename_root):
 
 if __name__ == "__main__":
     path = "Data"
-    file_extension = "jpg"
-    filenames = get_filenames(path, file_extension, isImported=True)
+    specific_name = ".jpg"
+    filenames = get_filenames(path, specific_name, isImported=True)
 
     for filename in filenames:
         write_imported_root_to_txt(filename)
