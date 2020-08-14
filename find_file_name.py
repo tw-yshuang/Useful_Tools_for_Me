@@ -7,9 +7,9 @@ import glob
 '''
 
 
-def get_filenames(path, specific_name, isImported=False):
+def get_filenames(dir_path, specific_name, isImported=False):
     '''
-        This function can find any specific name under the path, even the file inside directories under the path.
+        This function can find any specific name under the dir_path, even the file inside directories under the path.
         -----
         `specific_name`: 
         --
@@ -24,7 +24,7 @@ def get_filenames(path, specific_name, isImported=False):
     else:
         imported_root_ls = []
 
-    for root, dirs, file in walk(path):
+    for root, dirs, file in walk(dir_path):
         load_filenames = glob.glob(root + specific_name)
 
         if imported_root_ls == ['']:
