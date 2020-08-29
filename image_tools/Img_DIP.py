@@ -132,3 +132,35 @@ def remove_img_nosie(img, contours, isShow=False):
         if cv2.waitKey(1) & 0xFF == ord('q'):
             pass
     return crop_img
+
+
+def get_filter_img(img, kernel='laplace', isShow=False):
+    '''
+    You can create your own kernel !!
+    Let img sharpen can use "laplace" kernel, 
+    >>> kernel = np.array([[-1, -1, -1],
+                        [-1, 9, -1],
+                        [-1, -1, -1]])
+
+    Let img smoothing can use "mean" kernel,
+    >>>　kernel = np.array([[1, 1, 1],
+                       [1, 1, 1],
+                       [1, 1, 1]])
+    '''
+    if kernel == 'laplace':  # laplacian filter
+        kernel = np.array([[-1, -1, -1],
+                           [-1, 9, -1],
+                           [-1, -1, -1]])
+    elif kernel == 'mean':
+        kernel = np.array([[1, 1, 1],
+                           [1, 1, 1],
+                           [1, 1, 1]]) / 9
+    # applying the sharpening kernel to the input image & displaying it
+    output_img = cv2.filter2D(img, -1, kernel)
+    if isShow:
+        cv2.imshow("Original", img)
+        cv2.imshow("Change Intensity image", output_img)
+        # cv2.waitKey(0)
+        # if cv2.waitKey(1) & 0xFF == ord('q'):
+        #     pass
+    return output_img
