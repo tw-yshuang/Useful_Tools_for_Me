@@ -3,16 +3,16 @@ import skimage
 import numpy as np
 
 
-def img_pepper_salt_noised(cvImg, amount=0.05, isShow=False):
-    img = cv2.cvtColor(cvImg, cv2.COLOR_BGR2RGB)
+def get_pepper_salt_noised(img, amount=0.05, isShow=False):
+    # img = cv2.cvtColor(cvImg, cv2.COLOR_BGR2RGB)
     img = img/255.0  # floating point image
     img_noised = skimage.util.random_noise(img, 's&p', amount=amount)
     img_noised = np.uint8(img_noised*256)
-    cvImg_noised = cv2.cvtColor(img_noised, cv2.COLOR_BGR2RGB)
+    # img_noised = cv2.cvtColor(img_noised, cv2.COLOR_BGR2RGB)
     if isShow:
-        cv2.imshow("Pepper_salt_noise: " + str(amount), cvImg_noised)
+        cv2.imshow("Pepper_salt_noise: " + str(amount), img_noised)
         cv2.waitKey(0)
-    return cvImg_noised
+    return img_noised
 
 
 def img_gaussian_noised(cvImg, var=0.01, isShow=False):
