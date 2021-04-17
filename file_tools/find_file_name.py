@@ -16,8 +16,9 @@ def get_filenames(dir_path, specific_name, isImported=False):
         >>> Can type any word or extension. 
         e.g. '*cat*', '.csv', '*cat*.csv'
     '''
-    specific_name = '/*{}'.format(specific_name)
     filenames = []
+    if dir_path[-1] != '/':
+        dir_path += '/'
 
     if isImported is True:
         imported_root_ls = read_imported_root_from_txt()
