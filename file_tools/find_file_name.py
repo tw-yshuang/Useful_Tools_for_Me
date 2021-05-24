@@ -14,7 +14,7 @@ def get_filenames(dir_path, specific_name, isImported=False):
         `specific_name`: 
         --
         >>> Can type any word or extension. 
-        e.g. '*cat*', '.csv', '*cat*.csv'
+        e.g. '*cat*', '*.csv', '*cat*.csv'
     '''
     filenames = []
     if dir_path[-1] != '/':
@@ -26,7 +26,7 @@ def get_filenames(dir_path, specific_name, isImported=False):
         imported_root_ls = []
 
     for root, dirs, file in walk(dir_path):
-        load_filenames = glob.glob(root + specific_name)
+        load_filenames = glob.glob(f'{root}/{specific_name}')
 
         if imported_root_ls == ['']:
             if len(load_filenames) == 1:
