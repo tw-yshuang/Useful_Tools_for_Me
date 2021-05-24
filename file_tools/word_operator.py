@@ -1,8 +1,8 @@
-def str_format(word, style='defalt', fore=None, background=None):
+def str_format(word, style='default', fore=None, background=None):
     '''
     顯示方式        　 Style           variable
     --------------------------------------------
-    0               終端默認設置         defalt
+    0               終端默認設置         default
     1               高亮顯示             hight
     2               低亮顯示             less
     22              一般顯示             normal
@@ -27,7 +27,7 @@ def str_format(word, style='defalt', fore=None, background=None):
     37           47            白色      white
     '''
     style_dict = {
-        'defalt': 0,
+        'default': 0,
         'hight': 1,
         'less': 2,
         'normal': 22,
@@ -74,7 +74,7 @@ def str_format(word, style='defalt', fore=None, background=None):
 
     error_msg = ''
     for error in error_ls:
-        error_msg += f"Worng {error} parameter!! Use defalt parameter for {error}.\n"
+        error_msg += f"Worng {error} parameter!! Use default parameter for {error}.\n"
 
     if error_msg != '':
         print(str_format(error_msg, fore='r'))
