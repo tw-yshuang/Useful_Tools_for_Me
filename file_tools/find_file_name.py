@@ -10,12 +10,13 @@ import glob
 
 def get_filenames(dir_path, specific_name, isImported=False):
     '''
-    This function can find any specific name under the dir_path, even the file inside directories under the path.
+    get_filenames
     -----
-    `specific_name`:
-    --
-    >>> Can type any word or extension.
-    e.g. '*cat*', '*.csv', '*cat*.csv'
+    This function can find any specific name under the dir_path, even the file inside directories.
+
+    specific_name:
+        >>> Can type any word or extension.
+        e.g. '*cat*', '*.csv', '*cat*.csv'
     '''
     filenames = []
     if dir_path[-1] != '/':
