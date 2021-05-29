@@ -1,84 +1,66 @@
+from typing import List
 import matplotlib.pyplot as plt
-import numpy as np
-import pandas as pd
+import matplotlib
+
+matplotlib.use('AGG')
 
 
-def save_history_csv(EPOCH, train_loss_ls, train_acc_ls, test_acc_ls, save_path='out/'):
-    # <<<set the name that won't let program auto cover it~~>>>
-    name_mark = str(test_acc_ls[-1])[2:5]
-    col_names = ["EPOCH", "train_acc", "train_loss", "test_acc"]
-    col_datas = [EPOCH, train_acc_ls, train_loss_ls, test_acc_ls]
-    cols_dict = {}
-    for i in range(len(col_names)):
-        if i == 0:
-            col_dict = {col_names[i]: range(1, EPOCH + 1)}
-        else:
-            col_dict = {col_names[i]: col_datas[i]}
-        cols_dict.update(col_dict)
+class Model_Perform_Tool(object):
+    def __init__(
+        self,
+        train_loss_ls: List[float] or None = None,
+        test_loss_ls: List[float] or None = None,
+        train_acc_ls: List[float] or None = None,
+        test_acc_ls: List[float] or None = None,
+        saveDir: str = './out',
+    ) -> None:
+        self.num_epoch = len(train_loss_ls)
+        self.train_loss_ls = train_loss_ls
+        self.test_loss_ls = test_loss_ls
+        self.train_acc_ls = train_acc_ls
+        self.test_acc_ls = test_acc_ls
+        self.saveDir = saveDir
 
-    df = pd.DataFrame(cols_dict)
-    df.to_csv("{}/{}_history.csv".format(save_path, name_mark), encoding='utf-8')
+    def save_history_csv(self):
+        import pandas as pd
 
+        df = pd.DataFrame(
+            {
+                'EPOCH': range(1, self.num_epoch + 1),
+                'train_acc': self.train_acc_ls if self.train_acc_ls is not None else [],
+                'train_loss': self.train_loss_ls if self.train_loss_ls is not None else [],
+                'test_acc': self.test_acc_ls if self.test_acc_ls is not None else [],
+                'test_loss': self.test_loss_ls if self.test_loss_ls is not None else [],
+            }
+        )
+        df.to_csv(f'{self.saveDir}/e{self.num_epoch}_history.csv')
 
-def draw_plot(EPOCH, train_loss_ls, train_acc_ls, test_acc_ls, save_path='out/'):
-    # <<<set the name that won't let program auto cover it~~>>>
-    name_mark = str(test_acc_ls[-1])[2:5]
+    def draw_plot(self, startNumEpoch: int = 10):
+        epochs = range(startNumEpoch + 1, self.num_epoch + 1)
+        plt.clf()
 
-    EPOCH_times = range(1, EPOCH + 1)
-    plt.cla()
-    plt.plot(EPOCH_times, train_loss_ls, marker='o',
-             markerfacecolor='white', markersize=5)
-    # 设置数字标签
-    i = 0
-    for a, b in zip(EPOCH_times, train_loss_ls):
-        i += 1
-        if i % 10 == 0 or i == EPOCH+1:
-            if b != 1:
-                b = np.round(b, 3)
-            plt.text(a, b, b, ha='center',
-                        va='bottom', fontsize=10)
-    # 設定圖片標題，以及指定字型設定，x代表與圖案最左側的距離，y代表與圖片的距離
-    plt.title("Train_loss", x=0.5, y=1.03)
-    # 设置刻度字体大小
-    plt.xticks(fontsize=10)
-    plt.yticks(fontsize=10)
-    # 標示x軸(labelpad代表與圖片的距離)
-    plt.xlabel("Epoch", fontsize=10)
-    # 標示y軸(labelpad代表與圖片的距離)
-    plt.ylabel("Loss", fontsize=10)
-    plt.savefig("{}/{}train_loss.png".format(save_path, name_mark))
+        for key, values_ls in {'Loss': [self.train_loss_ls, self.test_loss_ls], 'Acc': [self.train_acc_ls, self.test_acc_ls]}.items():
+            for idx, values in enumerate(values_ls):
+                if values is not None:
+                    values = values[startNumEpoch:]
+                    best_value = min(values) if key == 'Loss' else max(values)
+                    plt.plot(epochs, values)
+                    # 设置数字标签
+                    i = startNumEpoch
+                    for epoch, value in zip(epochs, values):
+                        i += 1
+                        if i % (self.num_epoch // 5) == 0 or i == self.num_epoch or best_value == value:
+                            plt.text(epoch, value, f'{value:.3e}', ha='center', va=('bottom' if idx == 0 else 'top'), fontsize=10)
 
-    plt.cla()
-    plt.plot(EPOCH_times, train_acc_ls, marker='o',
-             markerfacecolor='white', markersize=5)
-    i = 0
-    for d, e in zip(EPOCH_times, train_acc_ls):
-        i += 1
-        if i % 10 == 0 or i == EPOCH+1:
-            if e != 1:
-                try:
-                    e = np.round(e, 3)
-                except AttributeError:
-                    e = np.round(e, 3)
-            plt.text(d, e, e,
-                     ha='center', va='bottom', fontsize=10)
-    plt.plot(EPOCH_times, test_acc_ls, marker='o',
-             markerfacecolor='white', markersize=5)
-    i = 0
-    for a, b in zip(EPOCH_times, test_acc_ls):
-        i += 1
-        if i % 10 == 0 or i == EPOCH+1:
-            if b != 1:
-                b = np.round(b, 3)
-            plt.text(a, b, b,
-                        ha='center', va='top', fontsize=10)
-    # 設定圖片標題，以及指(定字型設定，x代表與圖案最左側的距離，y代表與圖片的距離
-    plt.title("Accuracy", x=0.5, y=1.03)
-    # 设置刻度字体大小
-    plt.xticks(fontsize=10)
-    plt.yticks(fontsize=10)
-    # 標示x軸(labelpad代表與圖片的距離)
-    plt.xlabel("Epoch", fontsize=10)
-    # 標示y軸(labelpad代表與圖片的距離)
-    plt.ylabel("Accuracy", fontsize=10)
-    plt.savefig("{}/{}acc.png".format(save_path, name_mark))
+            if [True for values in values_ls if values is not None]:
+                # 設定圖片標題，以及指定字型設定，x代表與圖案最左側的距離，y代表與圖片的距離
+                plt.title(key, x=0.5, y=1.03)
+                # 设置刻度字体大小
+                plt.xticks(fontsize=10)
+                plt.yticks(fontsize=10)
+                # 標示x軸(labelpad代表與圖片的距離)
+                plt.xlabel('Epoch', fontsize=10)
+                # 標示y軸(labelpad代表與圖片的距離)
+                plt.ylabel(key, fontsize=10)
+                plt.savefig(f'{self.saveDir}/e{self.num_epoch}_{key}.png')
+                plt.clf()
