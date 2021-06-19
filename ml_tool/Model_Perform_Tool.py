@@ -1,6 +1,8 @@
+import os
 from typing import List
-import matplotlib.pyplot as plt
 import matplotlib
+import matplotlib.pyplot as plt
+from PIL import Image as PILimg
 
 matplotlib.use('AGG')
 
@@ -27,15 +29,15 @@ class Model_Perform_Tool(object):
         df = pd.DataFrame(
             {
                 'EPOCH': range(1, self.num_epoch + 1),
-                'train_acc': self.train_acc_ls if self.train_acc_ls is not None else [],
-                'train_loss': self.train_loss_ls if self.train_loss_ls is not None else [],
-                'test_acc': self.test_acc_ls if self.test_acc_ls is not None else [],
-                'test_loss': self.test_loss_ls if self.test_loss_ls is not None else [],
+                'train_acc': self.train_acc_ls if self.train_acc_ls is not None else [None] * self.num_epoch,
+                'train_loss': self.train_loss_ls if self.train_loss_ls is not None else [None] * self.num_epoch,
+                'test_acc': self.test_acc_ls if self.test_acc_ls is not None else [None] * self.num_epoch,
+                'test_loss': self.test_loss_ls if self.test_loss_ls is not None else [None] * self.num_epoch,
             }
         )
         df.to_csv(f'{self.saveDir}/e{self.num_epoch}_history.csv')
 
-    def draw_plot(self, startNumEpoch: int = 10):
+    def draw_plot(self, startNumEpoch: int = 10, isShow: bool = False, isSave: bool = False):
         epochs = range(startNumEpoch + 1, self.num_epoch + 1)
         plt.clf()
 
@@ -45,7 +47,7 @@ class Model_Perform_Tool(object):
                     values = values[startNumEpoch:]
                     best_value = min(values) if key == 'Loss' else max(values)
                     plt.plot(epochs, values)
-                    # 设置数字标签
+                    # 設置數字標籤
                     i = startNumEpoch
                     for epoch, value in zip(epochs, values):
                         i += 1
@@ -55,12 +57,19 @@ class Model_Perform_Tool(object):
             if [True for values in values_ls if values is not None]:
                 # 設定圖片標題，以及指定字型設定，x代表與圖案最左側的距離，y代表與圖片的距離
                 plt.title(key, x=0.5, y=1.03)
-                # 设置刻度字体大小
+                # 設置刻度字體大小
                 plt.xticks(fontsize=10)
                 plt.yticks(fontsize=10)
                 # 標示x軸(labelpad代表與圖片的距離)
                 plt.xlabel('Epoch', fontsize=10)
                 # 標示y軸(labelpad代表與圖片的距離)
                 plt.ylabel(key, fontsize=10)
-                plt.savefig(f'{self.saveDir}/e{self.num_epoch}_{key}.png')
+
+                graph_path = f'{self.saveDir}/e{self.num_epoch}_{key}.png'
+                plt.savefig(graph_path)
+                if isShow:
+                    PILimg.open(graph_path).show()
+                if not isSave:
+                    os.remove(graph_path)
+
                 plt.clf()
