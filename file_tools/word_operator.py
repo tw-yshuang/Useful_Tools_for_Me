@@ -1,4 +1,4 @@
-def str_format(word, style='default', fore=None, background=None):
+def str_format(word: str, style: str = 'default', fore: str = None, background: str = None):
     '''
     顯示方式        　 Style           variable
     --------------------------------------------
@@ -55,7 +55,7 @@ def str_format(word, style='default', fore=None, background=None):
     word_setting = ''
     error_ls = []
 
-    for i, variable in enumerate([style, fore, background]):
+    for i, variable in enumerate([style.lower(), fore.lower(), background.lower()]):
         if i == 0:
             try:
                 word_setting = f'{style_dict[style]}'
@@ -82,7 +82,7 @@ def str_format(word, style='default', fore=None, background=None):
     return f'\033[{word_setting}{word}\033[0m'
 
 
-def replace_keyword(filename, target_word, replace_word):
+def replace_keyword(filename: str, target_word: str, replace_word: str):
     new_f = ''
     with open(filename, 'r') as f:
         new_f = f.read().replace(target_word, replace_word)
@@ -90,7 +90,7 @@ def replace_keyword(filename, target_word, replace_word):
         f.write(new_f)
 
 
-def find_keyword(filename, keyword):
+def find_keyword(filename: str, keyword: str):
     keyword_set = set()
 
     with open(filename, 'r') as f:
@@ -100,11 +100,3 @@ def find_keyword(filename, keyword):
                 keyword_set.add(line[keyword_index + len(keyword) :])
 
     return list(sorted(keyword_set))
-
-
-def main():
-    pass
-
-
-if __name__ == '__main__':
-    main()
