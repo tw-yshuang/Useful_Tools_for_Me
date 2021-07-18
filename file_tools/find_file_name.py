@@ -8,7 +8,7 @@ import glob
 '''
 
 
-def get_filenames(dir_path, specific_name, isImported=False):
+def get_filenames(dir_path, specific_name, isImported=False) -> list:
     '''
     get_filenames
     -----
@@ -49,7 +49,7 @@ def get_filenames(dir_path, specific_name, isImported=False):
     return filenames
 
 
-def read_imported_root_from_txt():
+def read_imported_root_from_txt() -> list:
     path = "./already_imported_root.txt"
     try:
         imported_root_info = open(path).read()
@@ -61,7 +61,7 @@ def read_imported_root_from_txt():
     return imported_root_ls
 
 
-def write_imported_root_to_txt(filename_root):
+def write_imported_root_to_txt(filename_root) -> None:
     imported_root_info = open("already_imported_root.txt", "r")
     if imported_root_info.read() == "":
         imported_root_info = open("already_imported_root.txt", "w", encoding="utf-8")
