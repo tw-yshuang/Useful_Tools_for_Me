@@ -1,4 +1,4 @@
-def str_format(word: str, style: str = 'default', fore: str = None, background: str = None):
+def str_format(word: str, style: str = 'default', fore: str = 'default', background: str = 'default'):
     '''
     顯示方式        　 Style           variable
     --------------------------------------------
@@ -55,20 +55,22 @@ def str_format(word: str, style: str = 'default', fore: str = None, background: 
     word_setting = ''
     error_ls = []
 
-    for i, variable in enumerate([style.lower(), fore.lower(), background.lower()]):
+    for i, variable in enumerate([style, fore, background]):
+        if variable == 'default':
+            continue
+
         if i == 0:
             try:
-                word_setting = f'{style_dict[style]}'
+                word_setting = f'{style_dict[style.lower()]}'
             except KeyError:
                 word_setting = '0'
                 error_ls.append(variable_ls[i])
         else:
             i -= 1
-            if variable is not None:
-                try:
-                    word_setting += f';{30+i*10+color_dict[variable]}'
-                except KeyError:
-                    error_ls.append(variable_ls[i])
+            try:
+                word_setting += f';{30+i*10+color_dict[variable.lower()]}'
+            except KeyError:
+                error_ls.append(variable_ls[i])
 
     word_setting += 'm'
 

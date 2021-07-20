@@ -1,5 +1,6 @@
 import cv2
 import numpy as np
+
 '''
     This code edit by YU-SHUN from NTUT IEM 
     oringal code is from NTUT IEM Ph.D TIEN
@@ -11,8 +12,7 @@ import numpy as np
 
 
 def get_threshold_mask(imgray, THRESH_VALUE=170):
-    ret, thresh = cv2.threshold(
-        imgray, THRESH_VALUE, 255, cv2.THRESH_BINARY)  # setting threshold
+    ret, thresh = cv2.threshold(imgray, THRESH_VALUE, 255, cv2.THRESH_BINARY)  # setting threshold
 
     return thresh
 
@@ -31,16 +31,13 @@ def get_contours_binary(img, THRESH_VALUE=170, whiteGround=True, morphologyActiv
         thresh_white = 255 - thresh
 
     if morphologyActive is True:
-        thresh_white = cv2.morphologyEx(
-            thresh_white, cv2.MORPH_OPEN, np.ones((3, 3), dtype='uint8'))
-        thresh_white = cv2.morphologyEx(
-            thresh_white, cv2.MORPH_CLOSE, np.ones((3, 3), dtype='uint8'), iterations=1)
+        thresh_white = cv2.morphologyEx(thresh_white, cv2.MORPH_OPEN, np.ones((3, 3), dtype='uint8'))
+        thresh_white = cv2.morphologyEx(thresh_white, cv2.MORPH_CLOSE, np.ones((3, 3), dtype='uint8'), iterations=1)
 
     # if your python-cv version is lower than 4.0 the cv2.findContours will return 3 variable,
     # upper 4.0 : contours, hierarchy = cv2.findContours(XXX)
     # lower 4.0 : _, contours, hierarchy = cv2.findContours(XXX)
-    _, contours, hierarchy = cv2.findContours(
-        thresh_white, cv2.RETR_TREE, cv2.CHAIN_APPROX_SIMPLE)
+    contours, hierarchy = cv2.findContours(thresh_white, cv2.RETR_TREE, cv2.CHAIN_APPROX_SIMPLE)
 
     # cv2.imshow('a', thresh_white)
     # cv2.waitKey(0)
@@ -77,8 +74,7 @@ def draw_center(img, feature_list, color=(255, 255, 255), radius=5, isShow=True)
     img_center = img.copy()
     for f in feature_list:  # center is fearue[0]
         if f[0][0] is not None:
-            img_center = cv2.circle(
-                img_center, f[0], radius, color, -1)  # -1 filled
+            img_center = cv2.circle(img_center, f[0], radius, color, -1)  # -1 filled
             if isShow:
                 cv2.imshow("image with center", img_center)
                 # cv2.waitKey(0)
@@ -89,8 +85,7 @@ def draw_bbox(img, feature_list, color=(0, 255, 0), width=2, isShow=True):
     img_bbox = img.copy()
     for f in feature_list:  # center is fearue[0]
         (x, y, w, h) = f[3]
-        img_bbox = cv2.rectangle(
-            img_bbox, (x, y), (x + w, y + h), color, width)  # -1 filled
+        img_bbox = cv2.rectangle(img_bbox, (x, y), (x + w, y + h), color, width)  # -1 filled
 
     if isShow:
         cv2.imshow("image with bbox", img_bbox)
@@ -106,8 +101,8 @@ def get_crop_img_list(img, feature_list, extra_W=0, extra_H=0, isShow=False):
         (x, y, w, h) = f[3]
         x -= extra_W
         y -= extra_H
-        w += extra_W*2
-        h += extra_H*2
+        w += extra_W * 2
+        h += extra_H * 2
 
         new_position = [x, y]
         for i in range(len(new_position)):
@@ -120,7 +115,7 @@ def get_crop_img_list(img, feature_list, extra_W=0, extra_H=0, isShow=False):
         if y + h > img.shape[0]:
             h = img.shape[0] - y
 
-        crop_img = img[y: y + h, x: x + w]
+        crop_img = img[y : y + h, x : x + w]
         crop_img_list.append(crop_img)
 
     if isShow:
@@ -147,42 +142,40 @@ def draw_minSCircle(img, feature_list, color=(0, 255, 0), width=2, isShow=True):
     img_circle = img.copy()
     for f in feature_list:  # center is fearue[0]
         ((x, y), radius) = f[5]  # –> int0會省略小數點後方的數字
-        img_circle = cv2.circle(
-            img_circle, (int(x), int(y)), int(radius), color, width)
+        img_circle = cv2.circle(img_circle, (int(x), int(y)), int(radius), color, width)
     if isShow:
         cv2.imshow("image with bbox", img_circle)
         # cv2.waitKey(0)
     return img_circle
 
+    # def get_bbox(img, contours, color=(0, 0, 255), width=2, isShow=True):
+    #     cv2.cvtColor(img, cv2.COLOR_BGR2GRAY)
+    #     for contour in contours:
+    #         x, y, w, h = cv2.boundingRect(contour)
+    #     img_bbox = cv2.rectangle(
+    #         img.copy(), (x, y), (x+w, y+h), (0, 0, 255), 5)
 
-# def get_bbox(img, contours, color=(0, 0, 255), width=2, isShow=True):
-#     cv2.cvtColor(img, cv2.COLOR_BGR2GRAY)
-#     for contour in contours:
-#         x, y, w, h = cv2.boundingRect(contour)
-#     img_bbox = cv2.rectangle(
-#         img.copy(), (x, y), (x+w, y+h), (0, 0, 255), 5)
-
-#     # cv2.imshow('bbox', img_bbox)
+    #     # cv2.imshow('bbox', img_bbox)
     # cv2.waitKey(0)
-#     return img_bbox
+    #     return img_bbox
 
+    # def mark_center(contours, img=None, isShow=False):
+    #     for i in contours:
+    #         # calculate moments for each contour
+    #         M = cv2.moments(i)
+    #         if(M["m00"] == 0):
+    #             M["m00"] = 1
+    #         # calculate x,y coordinate of center
+    #         cX = int(M["m10"] / M["m00"])
+    #         cY = int(M["m01"] / M["m00"])
 
-# def mark_center(contours, img=None, isShow=False):
-#     for i in contours:
-#         # calculate moments for each contour
-#         M = cv2.moments(i)
-#         if(M["m00"] == 0):
-#             M["m00"] = 1
-#         # calculate x,y coordinate of center
-#         cX = int(M["m10"] / M["m00"])
-#         cY = int(M["m01"] / M["m00"])
-
-#         if isShow is True:
-#             # cv2.drawContours(img, [c], -1, (0, 255, 0), 2)
-#             img_center = cv2.circle(img, (cX, cY), 3, (20, 255, 0), -1)
-#             # cv2.putText(img, "centroid", (cX - 25, cY - 25),cv2.FONT_HERSHEY_SIMPLEX, 0.5, (0, 255, 0), 2)
-#             cv2.imshow("img_center", img_center)
+    #         if isShow is True:
+    #             # cv2.drawContours(img, [c], -1, (0, 255, 0), 2)
+    #             img_center = cv2.circle(img, (cX, cY), 3, (20, 255, 0), -1)
+    #             # cv2.putText(img, "centroid", (cX - 25, cY - 25),cv2.FONT_HERSHEY_SIMPLEX, 0.5, (0, 255, 0), 2)
+    #             cv2.imshow("img_center", img_center)
     cv2.waitKey(0)
+
 
 #     return (cX, cY)
 
@@ -211,19 +204,17 @@ def get_signature_info(contours, center, isShow=False):
         pX = points[i, 0]
         pY = points[i, 1]
 
-        center_dist = (abs(cX-pX)**2 + abs(cY-pY)**2)**(1/2)
+        center_dist = (abs(cX - pX) ** 2 + abs(cY - pY) ** 2) ** (1 / 2)
         vecter_a = np.array([points[i, 0] - cX, cY - points[i, 1]])
 
         # theta = np.degrees(np.arccos((vecter_0 - vecter_a) / vecter_0[0] * center_dist)) 錯的？？？
-        theta = np.degrees(
-            np.arccos(np.dot(vecter_0, vecter_a) / (vecter_0[0] * center_dist)))
+        theta = np.degrees(np.arccos(np.dot(vecter_0, vecter_a) / (vecter_0[0] * center_dist)))
         if pY > cY:
             theta = 360 - theta
 
         center_dist_infos.update({theta: center_dist})
 
-    center_dist_infos_ls = sorted(
-        center_dist_infos.items(), key=lambda x: x[0])
+    center_dist_infos_ls = sorted(center_dist_infos.items(), key=lambda x: x[0])
     center_dist_infos = {}
     for item in center_dist_infos_ls:
         center_dist_infos.update({item[0]: item[1]})
@@ -251,8 +242,7 @@ if __name__ == "__main__":
     for path in paths:
         img = cv2.imread(path)
         contours = get_contours_binary(img, whiteGround=False)
-        img_contours = cv2.drawContours(
-            img.copy(), contours, -1, (0, 255, 0), 3)
+        img_contours = cv2.drawContours(img.copy(), contours, -1, (0, 255, 0), 3)
         # cv2.imshow('con', img_contours)
         cv2.waitKey(0)
 
@@ -264,19 +254,16 @@ if __name__ == "__main__":
         img_bbox = draw_bbox(img, features)
         signature_info = get_signature_info(contours, center, isShow=False)
 
-        plt.subplot(3, 3, i+1)
+        plt.subplot(3, 3, i + 1)
         plt.imshow(img, cmap='gray', interpolation='bilinear')
-        plt.title("oringal {}".format(
-            path[7: -4])), plt.xticks([]), plt.yticks([])
+        plt.title("oringal {}".format(path[7:-4])), plt.xticks([]), plt.yticks([])
 
-        plt.subplot(3, 3, i+1+3)
+        plt.subplot(3, 3, i + 1 + 3)
         plt.imshow(img_contours, cmap='gray', interpolation='bilinear')
-        plt.title("contours {}".format(
-            path[7: -4])), plt.xticks([]), plt.yticks([])
+        plt.title("contours {}".format(path[7:-4])), plt.xticks([]), plt.yticks([])
 
-        plt.subplot(3, 3, i+1+3+3)
-        plt.title("signature {}".format(
-            path[7: -4])), plt.xticks([]), plt.yticks([])
+        plt.subplot(3, 3, i + 1 + 3 + 3)
+        plt.title("signature {}".format(path[7:-4])), plt.xticks([]), plt.yticks([])
         plt.xlim([0, 360])
         y_min = min(signature_info.values())
         y_max = max(signature_info.values())
@@ -286,9 +273,8 @@ if __name__ == "__main__":
         a = list(signature_info.keys())
         b = list(signature_info.values())
         plt.plot(a, b)
-        plt.xticks([0, 90, 180, 270, 360], [
-                   r'$0$', r'$\pi/2$', r'$\pi$', r'2$\pi/3$', r'2$\pi$'])
-        plt.yticks([y_min - 10, y_min + (y_max - y_min)/2, y_max + 10])
+        plt.xticks([0, 90, 180, 270, 360], [r'$0$', r'$\pi/2$', r'$\pi$', r'2$\pi/3$', r'2$\pi$'])
+        plt.yticks([y_min - 10, y_min + (y_max - y_min) / 2, y_max + 10])
 
         i += 1
     plt.show()
