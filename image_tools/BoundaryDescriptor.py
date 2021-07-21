@@ -45,7 +45,7 @@ def get_contours_binary(img, THRESH_VALUE=170, whiteGround=True, morphologyActiv
     return contours
 
 
-def calc_contour_feature(img, contours):
+def calc_contour_feature(contours):
     feature_list = list()
     for cont in contours:
         area = cv2.contourArea(cont)
