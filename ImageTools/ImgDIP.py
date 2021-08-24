@@ -1,5 +1,5 @@
-import numpy as np
 import cv2
+import numpy as np
 
 
 class ImgDIP(object):
@@ -46,7 +46,7 @@ class ImgDIP(object):
 def convert_hsv(image, isShow=True):
     hsv_img = cv2.cvtColor(image, cv2.COLOR_BGR2HSV)
     H, S, V = hsv_img[:, :, 0], hsv_img[:, :, 1], hsv_img[:, :, 2]
-    #(H, S, V) = split_color(image, False)
+    # (H, S, V) = split_color(image, False)
     if isShow:
         cv2.imshow("Original", image)
         cv2.imshow("HSV", hsv_img)
@@ -60,12 +60,10 @@ def convert_hsv(image, isShow=True):
 def get_square_img(img):
     square_size = max(img.shape[:])
     square_center = int(square_size / 2)
-    output_img = np.zeros(
-        (square_size, square_size), dtype='uint8')
-    start_point_x = square_center - int(img.shape[0]/2)
-    start_point_y = square_center - int(img.shape[1]/2)
-    output_img[start_point_x: start_point_x + img.shape[0],
-               start_point_y: start_point_y + img.shape[1]] = img
+    output_img = np.zeros((square_size, square_size), dtype='uint8')
+    start_point_x = square_center - int(img.shape[0] / 2)
+    start_point_y = square_center - int(img.shape[1] / 2)
+    output_img[start_point_x : start_point_x + img.shape[0], start_point_y : start_point_y + img.shape[1]] = img
 
     return output_img
 
@@ -77,8 +75,7 @@ def get_contours_binary(img):
     thresh_white = 255 - thresh
 
     # if your python-cv version is less than 4.0 the cv2.findContours will return 3 variable
-    _, contours, hierarchy = cv2.findContours(
-        thresh_white, cv2.RETR_TREE, cv2.CHAIN_APPROX_NONE)
+    _, contours, hierarchy = cv2.findContours(thresh_white, cv2.RETR_TREE, cv2.CHAIN_APPROX_NONE)
 
     return contours
 
@@ -94,8 +91,7 @@ def get_biggest_countour(img, isShow=False):
             new_contours.append(contour)
 
     if len(contour_area_list) != 0:
-        biggest_contour = [
-            new_contours[contour_area_list.index(max(contour_area_list))]]
+        biggest_contour = [new_contours[contour_area_list.index(max(contour_area_list))]]
     else:
         # need to fix : no contour fit the constrain
         biggest_contour = []
@@ -103,8 +99,7 @@ def get_biggest_countour(img, isShow=False):
 
     if isShow is True:
         bgr_img = cv2.cvtColor(img, cv2.COLOR_GRAY2BGR)
-        bgr_img = cv2.drawContours(
-            bgr_img, biggest_contour, -1, (0, 255, 0), 3)
+        bgr_img = cv2.drawContours(bgr_img, biggest_contour, -1, (0, 255, 0), 3)
         cv2.imshow('biggest_contour', bgr_img)
         # cv2.waitKey(0)
         if cv2.waitKey(1) & 0xFF == ord('q'):
@@ -115,15 +110,14 @@ def get_biggest_countour(img, isShow=False):
 
 def remove_img_nosie(img, contours, isShow=False):
     '''
-        Only save contours part, else place become back.
-        ===
-        create a np.zeros array(black),
-        use cv2.drawContours() make contours part become 255 (white),
-        final, use cv2.gitwise_and() to remove noise for img
+    Only save contours part, else place become back.
+    ===
+    create a np.zeros array(black),
+    use cv2.drawContours() make contours part become 255 (white),
+    final, use cv2.gitwise_and() to remove noise for img
     '''
     crop_img = np.zeros(img.shape, dtype="uint8")
-    crop_img = cv2.drawContours(
-        crop_img.copy(), contours, -1, 255, thickness=-1)
+    crop_img = cv2.drawContours(crop_img.copy(), contours, -1, 255, thickness=-1)
     crop_img = cv2.bitwise_and(img, crop_img)
 
     if isShow is True:
@@ -137,7 +131,7 @@ def remove_img_nosie(img, contours, isShow=False):
 def get_filter_img(img, kernel='laplace', isShow=False):
     '''
     You can create your own kernel !!
-    Let img sharpen can use "laplace" kernel, 
+    Let img sharpen can use "laplace" kernel,
     >>> kernel = np.array([[-1, -1, -1],
                         [-1, 9, -1],
                         [-1, -1, -1]])
@@ -148,13 +142,9 @@ def get_filter_img(img, kernel='laplace', isShow=False):
                        [1, 1, 1]])
     '''
     if kernel == 'laplace':  # laplacian filter
-        kernel = np.array([[-1, -1, -1],
-                           [-1, 9, -1],
-                           [-1, -1, -1]])
+        kernel = np.array([[-1, -1, -1], [-1, 9, -1], [-1, -1, -1]])
     elif kernel == 'mean':
-        kernel = np.array([[1, 1, 1],
-                           [1, 1, 1],
-                           [1, 1, 1]]) / 9
+        kernel = np.array([[1, 1, 1], [1, 1, 1], [1, 1, 1]]) / 9
     # applying the sharpening kernel to the input image & displaying it
     output_img = cv2.filter2D(img, -1, kernel)
     if isShow:

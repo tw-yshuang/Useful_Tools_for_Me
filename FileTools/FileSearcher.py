@@ -1,6 +1,5 @@
-from os import walk
-from os import mknod
 import glob
+from os import walk, mknod
 
 '''
     This code edit by YU-SHUN from NTUT IEM,

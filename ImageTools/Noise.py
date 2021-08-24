@@ -5,9 +5,9 @@ import numpy as np
 
 def get_pepper_salt_noised(img, amount=0.05, isShow=False):
     # img = cv2.cvtColor(cvImg, cv2.COLOR_BGR2RGB)
-    img = img/255.0  # floating point image
+    img = img / 255.0  # floating point image
     img_noised = skimage.util.random_noise(img, 's&p', amount=amount)
-    img_noised = np.uint8(img_noised*256)
+    img_noised = np.uint8(img_noised * 256)
     # img_noised = cv2.cvtColor(img_noised, cv2.COLOR_BGR2RGB)
     if isShow:
         cv2.imshow("Pepper_salt_noise: " + str(amount), img_noised)
@@ -17,9 +17,9 @@ def get_pepper_salt_noised(img, amount=0.05, isShow=False):
 
 def img_gaussian_noised(cvImg, var=0.01, isShow=False):
     img = cv2.cvtColor(cvImg, cv2.COLOR_BGR2RGB)
-    img = img/255.0  # floating point image
+    img = img / 255.0  # floating point image
     img_noised = skimage.util.random_noise(img, 'gaussian', var=var)
-    img_noised = np.uint8(img_noised*256)
+    img_noised = np.uint8(img_noised * 256)
     cvImg_noised = cv2.cvtColor(img_noised, cv2.COLOR_BGR2RGB)
     if isShow:
         cv2.imshow("Gaussian_noised: " + str(var), cvImg_noised)
@@ -29,9 +29,9 @@ def img_gaussian_noised(cvImg, var=0.01, isShow=False):
 
 def img_speckle_noised(cvImg, var=0.01, isShow=False):
     img = cv2.cvtColor(cvImg, cv2.COLOR_BGR2RGB)
-    img = img/255.0  # floating point image
+    img = img / 255.0  # floating point image
     img_noised = skimage.util.random_noise(img, 'speckle', var=var)
-    img_noised = np.uint8(img_noised*256)
+    img_noised = np.uint8(img_noised * 256)
     cvImg_noised = cv2.cvtColor(img_noised, cv2.COLOR_BGR2RGB)
     if isShow:
         cv2.imshow("Speckle_noised: " + str(var), cvImg_noised)
@@ -44,17 +44,16 @@ def median_filter(img, K_size=3):  # img = 讀取圖片;K = 表示核大小，�
     H, W, C = img.shape
     # Zero padding
     pad = K_size // 2
-    out = np.zeros((H + pad*2, W + pad*2, C), dtype=np.float)
-    out[pad:pad+H, pad:pad+W] = img.copy().astype(np.float)
+    out = np.zeros((H + pad * 2, W + pad * 2, C), dtype=np.float)
+    out[pad : pad + H, pad : pad + W] = img.copy().astype(np.float)
     tmp = out.copy()  # 複製影像
 
     # filtering
     for y in range(H):
         for x in range(W):
             for c in range(C):
-                out[pad+y, pad+x,
-                    c] = np.median(tmp[y:y+K_size, x:x+K_size, c])
-    out = out[pad:pad+H, pad:pad+W].astype(np.uint8)
+                out[pad + y, pad + x, c] = np.median(tmp[y : y + K_size, x : x + K_size, c])
+    out = out[pad : pad + H, pad : pad + W].astype(np.uint8)
     return out
 
 
@@ -67,8 +66,9 @@ def mean_filter(img, G=3):  # img = 讀取圖片;G = 核大小(W,H) ex:(3,3) or 
     for y in range(Nh):
         for x in range(Nw):
             for c in range(C):
-                out[G*y:G*(y+1), G*x:G*(x+1), c] = np.mean(out[G *
-                                                               y:G*(y+1), G*x:G*(x+1), c]).astype(np.int)
+                out[G * y : G * (y + 1), G * x : G * (x + 1), c] = np.mean(out[G * y : G * (y + 1), G * x : G * (x + 1), c]).astype(
+                    np.int
+                )
     return out
 
 

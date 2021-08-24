@@ -10,8 +10,7 @@ def get_contours_binary(img):
     thresh_white = 255 - thresh
 
     # if your python-cv version is less than 4.0 the cv2.findContours will return 3 variable
-    _, contours, hierarchy = cv2.findContours(
-        thresh_white, cv2.RETR_TREE, cv2.CHAIN_APPROX_NONE)
+    _, contours, hierarchy = cv2.findContours(thresh_white, cv2.RETR_TREE, cv2.CHAIN_APPROX_NONE)
 
     return contours
 
@@ -20,7 +19,7 @@ def mark_center(contours, img=None, isShow=False):
     for i in contours:
         # calculate moments for each contour
         M = cv2.moments(i)
-        if(M["m00"] == 0):
+        if M["m00"] == 0:
             M["m00"] = 1
         # calculate x,y coordinate of center
         cX = int(M["m10"] / M["m00"])
@@ -60,19 +59,17 @@ def get_signature_info(contours, center, isShow=False):
         pX = points[i, 0]
         pY = points[i, 1]
 
-        center_dist = (abs(cX-pX)**2 + abs(cY-pY)**2)**(1/2)
+        center_dist = (abs(cX - pX) ** 2 + abs(cY - pY) ** 2) ** (1 / 2)
         vecter_a = np.array([points[i, 0] - cX, cY - points[i, 1]])
 
         # theta = np.degrees(np.arccos((vecter_0 - vecter_a) / vecter_0[0] * center_dist)) 錯的？？？
-        theta = np.degrees(
-            np.arccos(np.dot(vecter_0, vecter_a) / (vecter_0[0] * center_dist)))
+        theta = np.degrees(np.arccos(np.dot(vecter_0, vecter_a) / (vecter_0[0] * center_dist)))
         if pY > cY:
             theta = 360 - theta
 
         center_dist_infos.update({theta: center_dist})
 
-    center_dist_infos_ls = sorted(
-        center_dist_infos.items(), key=lambda x: x[0])
+    center_dist_infos_ls = sorted(center_dist_infos.items(), key=lambda x: x[0])
     center_dist_infos = {}
     for item in center_dist_infos_ls:
         center_dist_infos.update({item[0]: item[1]})
@@ -96,27 +93,23 @@ if __name__ == "__main__":
     for path in paths:
         img = cv2.imread(path)
         contours = get_contours_binary(img)
-        img_contours = cv2.drawContours(
-            img.copy(), contours, -1, (0, 255, 0), 3)
+        img_contours = cv2.drawContours(img.copy(), contours, -1, (0, 255, 0), 3)
 
         center = mark_center(contours)
         img_center = cv2.circle(img_contours, center, 3, (20, 255, 0), -1)
 
         signature_info = get_signature_info(contours, center, isShow=False)
 
-        plt.subplot(3, 3, i+1)
+        plt.subplot(3, 3, i + 1)
         plt.imshow(img, cmap='gray', interpolation='bilinear')
-        plt.title("oringal {}".format(
-            path[7: -4])), plt.xticks([]), plt.yticks([])
+        plt.title("oringal {}".format(path[7:-4])), plt.xticks([]), plt.yticks([])
 
-        plt.subplot(3, 3, i+1+3)
+        plt.subplot(3, 3, i + 1 + 3)
         plt.imshow(img_contours, cmap='gray', interpolation='bilinear')
-        plt.title("contours {}".format(
-            path[7: -4])), plt.xticks([]), plt.yticks([])
+        plt.title("contours {}".format(path[7:-4])), plt.xticks([]), plt.yticks([])
 
-        plt.subplot(3, 3, i+1+3+3)
-        plt.title("signature {}".format(
-            path[7: -4])), plt.xticks([]), plt.yticks([])
+        plt.subplot(3, 3, i + 1 + 3 + 3)
+        plt.title("signature {}".format(path[7:-4])), plt.xticks([]), plt.yticks([])
         plt.xlim([0, 360])
         y_min = min(signature_info.values())
         y_max = max(signature_info.values())
@@ -126,9 +119,8 @@ if __name__ == "__main__":
         a = list(signature_info.keys())
         b = list(signature_info.values())
         plt.plot(a, b)
-        plt.xticks([0, 90, 180, 270, 360], [
-                   r'$0$', r'$\pi/2$', r'$\pi$', r'2$\pi/3$', r'2$\pi$'])
-        plt.yticks([y_min - 10, y_min + (y_max - y_min)/2, y_max + 10])
+        plt.xticks([0, 90, 180, 270, 360], [r'$0$', r'$\pi/2$', r'$\pi$', r'2$\pi/3$', r'2$\pi$'])
+        plt.yticks([y_min - 10, y_min + (y_max - y_min) / 2, y_max + 10])
 
         i += 1
     plt.show()

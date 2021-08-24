@@ -1,9 +1,8 @@
-import numpy as np
 import cv2
+import numpy as np
 
 
 class ImgFftTransform(object):
-    
     def __init__(self, path, laryer=None):
         if laryer is None:
             self.img = cv2.imread(path)
@@ -16,30 +15,17 @@ class ImgFftTransform(object):
         self.gaussian = x * x.T
         # different edge detecting filters
         # scharr in x-direction
-        self.scharr = np.array([
-            [-3, 0, 3],
-            [-10, 0, 10],
-            [-3, 0, 3]])
+        self.scharr = np.array([[-3, 0, 3], [-10, 0, 10], [-3, 0, 3]])
         # sobel in x direction
-        self.sobel_x = np.array([
-            [-1, 0, 1],
-            [-2, 0, 2],
-            [-1, 0, 1]])
+        self.sobel_x = np.array([[-1, 0, 1], [-2, 0, 2], [-1, 0, 1]])
         # sobel in y direction
-        self.sobel_y = np.array([
-            [-1, -2, -1],
-            [0, 0, 0],
-            [1, 2, 1]])
+        self.sobel_y = np.array([[-1, -2, -1], [0, 0, 0], [1, 2, 1]])
         # laplacian
-        self.laplacian = np.array([
-            [0, 1, 0],
-            [1, -4, 1],
-            [0, 1, 0]])
+        self.laplacian = np.array([[0, 1, 0], [1, -4, 1], [0, 1, 0]])
 
-        self.shun_crate = np.array([
-            [1/(2**(1/2)), 1, 1/(2**(1/2))],
-            [1, -4-2/(2**(1/2)), 1],
-            [1/(2**(1/2)), 1, 1/(2**(1/2))]])
+        self.shun_crate = np.array(
+            [[1 / (2 ** (1 / 2)), 1, 1 / (2 ** (1 / 2))], [1, -4 - 2 / (2 ** (1 / 2)), 1], [1 / (2 ** (1 / 2)), 1, 1 / (2 ** (1 / 2))]]
+        )
 
     # 快速傅立葉變換（Fast Fourier Transform, FFT）
     def get_fft(self, img=None):
@@ -54,7 +40,7 @@ class ImgFftTransform(object):
     def get_fft_filter(self, filter_type, img=None):
         if img is None:
             img = self.img
-            
+
         fft_filter = np.fft.fft2(filter_type, img.shape)
 
         return fft_filter
@@ -91,14 +77,14 @@ class ImgFftTransform(object):
         c = 2
         img_log = np.log(img + 1)
         fft = self.get_fft(img_log)  # image after log
-        rows_center = np.floor(rows/2)
-        cols_center = np.floor(cols/2)
+        rows_center = np.floor(rows / 2)
+        cols_center = np.floor(cols / 2)
         D = np.zeros((rows, cols))
         H = np.zeros((rows, cols))
         for i in range(rows):
             for j in range(cols):
-                D[i, j] = (i - rows_center)**2 + (j - cols_center)**2
-                H[i, j] = (rH - rL) * (np.exp(c * (-D[i, j] / (d0**2)))) + rL
+                D[i, j] = (i - rows_center) ** 2 + (j - cols_center) ** 2
+                H[i, j] = (rH - rL) * (np.exp(c * (-D[i, j] / (d0 ** 2)))) + rL
         print("D", D)
         # print("H",H)
         ifft = self.get_ifft(H * fft)

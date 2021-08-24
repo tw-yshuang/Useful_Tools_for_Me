@@ -1,5 +1,5 @@
-import numpy as np
 import cv2
+import numpy as np
 
 
 class CameraDIP(object):
@@ -20,18 +20,15 @@ class CameraDIP(object):
             upper_color_bounds = np.array([255, 255, 255])
 
         # RGB2BGR
-        lower_color_bounds = np.array([lower_color_bounds[2],
-                                       lower_color_bounds[1], lower_color_bounds[0]])
-        upper_color_bounds = np.array([upper_color_bounds[2],
-                                       upper_color_bounds[1], upper_color_bounds[0]])
+        lower_color_bounds = np.array([lower_color_bounds[2], lower_color_bounds[1], lower_color_bounds[0]])
+        upper_color_bounds = np.array([upper_color_bounds[2], upper_color_bounds[1], upper_color_bounds[0]])
 
         self.cap = cv2.VideoCapture(self.capID)  # 開啟 camera
         while True:
             # capture frame-by-frame
             ret, frame = self.cap.read()
 
-            mask = cv2.inRange(
-                frame, lower_color_bounds, upper_color_bounds)
+            mask = cv2.inRange(frame, lower_color_bounds, upper_color_bounds)
 
             channels = frame.shape[2]
             for channel in range(channels):
@@ -60,8 +57,7 @@ class CameraDIP(object):
             ret, frame = self.cap.read()
 
             frame = cv2.cvtColor(frame, cv2.COLOR_BGR2HSV)
-            mask = cv2.inRange(
-                frame, lower_color_bounds, upper_color_bounds)
+            mask = cv2.inRange(frame, lower_color_bounds, upper_color_bounds)
 
             channels = frame.shape[2]
             for channel in range(channels):
@@ -81,17 +77,17 @@ class CameraDIP(object):
 
     def show_cap(self, subModule_name=None, isShow=True):
         '''
-            This fuction has no mask, if you want to add mask to generate the frame you make,
-            you can use variable:
-            >>> subModule_name
-            to make this happen,
-            in variable "subModule_name" put filename relative path that you call this function,
-            and in the filename that you input,
-            create a function name call "get_mask_frame",
-            push one input variable and one return variable into the function,
-            input original frame, the other is the frame you generate,
-            like this:
-            >>> get_mask_frame(frame)
+        This fuction has no mask, if you want to add mask to generate the frame you make,
+        you can use variable:
+        >>> subModule_name
+        to make this happen,
+        in variable "subModule_name" put filename relative path that you call this function,
+        and in the filename that you input,
+        create a function name call "get_mask_frame",
+        push one input variable and one return variable into the function,
+        input original frame, the other is the frame you generate,
+        like this:
+        >>> get_mask_frame(frame)
         '''
         self.cap = cv2.VideoCapture(self.capID)  # 開啟 camera
 
