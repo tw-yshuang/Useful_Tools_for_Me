@@ -7,7 +7,7 @@ from PIL import Image as PILimg
 matplotlib.use('AGG')
 
 
-class Model_Perform_Tool(object):
+class ModelPerform(object):
     def __init__(
         self,
         train_loss_ls: List[float] or None = None,
