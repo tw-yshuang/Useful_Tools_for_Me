@@ -112,7 +112,7 @@ def spend_time(func):
         start_time = time.time()
         result = func(*args, **kwargs)
         print(
-            f"func: {str_format(f'{func.__name__:23s}', fore='g')} | time: {str_format(f'{time.time()-start_time:10.4e}', fore='y')}sec"
+            f"func: {str_format(f'{func.__name__:25.25s}', fore='g')} | time: {str_format(f'{time.time()-start_time:10.4e}', fore='y')}sec"
         )
         return result
 
