@@ -102,3 +102,18 @@ def find_keyword(filename: str, keyword: str):
                 keyword_set.add(line[keyword_index + len(keyword) :])
 
     return list(sorted(keyword_set))
+
+
+# Decorator
+def spend_time(func):
+    import time
+
+    def wrap(*args, **kwargs):
+        start_time = time.time()
+        result = func(*args, **kwargs)
+        print(
+            f"func: {str_format(f'{func.__name__:23s}', fore='g')} | time: {str_format(f'{time.time()-start_time:10.4e}', fore='y')}sec"
+        )
+        return result
+
+    return wrap
