@@ -1,30 +1,34 @@
 def str_format(word: str, style: str = 'default', fore: str = 'default', background: str = 'default'):
-    '''
-    顯示方式        　 Style           variable
-    --------------------------------------------
-    0               終端默認設置         default
-    1               高亮顯示             hight
-    2               低亮顯示             less
-    22              一般顯示             normal
-    4               使用下劃線           line
-    24              刪去下劃線           unline
-    5               閃爍                blink
-    25              去閃爍              unblnk
-    7               反白顯示             negative
-    27              非反顯              unnegative
-    8               不可見              blank
-    28              可見                unblank
+    '''Style_table
+    ---
+    |顯示方式  |       　 Style      |    variable   |
+    |:-------:|:------------------:|:-------------:|
+    |0        |       終端默認設置   |      default  |
+    |1        |       高亮顯示       |      hight    |
+    |2        |       低亮顯示       |      less     |
+    |22       |       一般顯示       |      normal   |
+    |4        |       使用下劃線     |      line     |
+    |24       |       刪去下劃線     |      unline   |
+    |5        |       閃爍          |     blink     |
+    |25       |       去閃爍        |     unblnk    |
+    |7        |       反白顯示       |      negative |
+    |27       |       非反顯        |     unnegative|
+    |8        |       不可見        |     blank     |
+    |28       |       可見          |     unblank   |
 
-    Fore      Background       顏色     variable
-    ---------------------------------------------
-    30           40            黑色      black
-    31           41            紅色      r
-    32           42            綠色      g
-    33           43            黃色      y
-    34           44            藍色      b
-    35           45            洋紅      pink
-    36           46            青色      sky
-    37           47            白色      white
+
+    Color_table
+    ---
+    |Fore   |   Background   |    顏色   |  variable   |
+    |:-----:|:--------------:|:--------:|:------------:|
+    |30     |      40        |    黑色   |   black     |
+    |31     |      41        |    紅色   |   r         |
+    |32     |      42        |    綠色   |   g         |
+    |33     |      43        |    黃色   |   y         |
+    |34     |      44        |    藍色   |   b         |
+    |35     |      45        |    洋紅   |   pink      |
+    |36     |      46        |    青色   |   sky       |
+    |37     |      47        |    白色   |   white     |
     '''
     style_dict = {
         'default': 0,
