@@ -46,7 +46,7 @@ class ModelPerform(object):
         for key, values_ls in {'Loss': [self.train_loss_ls, self.test_loss_ls], 'Acc': [self.train_acc_ls, self.test_acc_ls]}.items():
             for idx, values in enumerate(values_ls):
                 if values is not None:
-                    values = values[startNumEpoch:]
+                    values = values[startNumEpoch:endNumEpoch]
                     best_value = min(values) if key == 'Loss' else max(values)
                     plt.plot(epochs, values)
                     # 設置數字標籤
