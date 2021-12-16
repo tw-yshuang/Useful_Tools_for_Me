@@ -37,8 +37,10 @@ class ModelPerform(object):
         )
         df.to_csv(f'{self.saveDir}/e{self.num_epoch}_history.csv')
 
-    def draw_plot(self, startNumEpoch: int = 10, isShow: bool = False, isSave: bool = False):
-        epochs = range(startNumEpoch + 1, self.num_epoch + 1)
+    def draw_plot(self, startNumEpoch: int = 10, endNumEpoch: int or None = None, isShow: bool = False, isSave: bool = False):
+        if endNumEpoch is None:
+            endNumEpoch = self.num_epoch
+        epochs = range(startNumEpoch + 1, endNumEpoch + 1)
         plt.clf()
 
         for key, values_ls in {'Loss': [self.train_loss_ls, self.test_loss_ls], 'Acc': [self.train_acc_ls, self.test_acc_ls]}.items():
@@ -51,7 +53,7 @@ class ModelPerform(object):
                     i = startNumEpoch
                     for epoch, value in zip(epochs, values):
                         i += 1
-                        if i % (self.num_epoch // 5) == 0 or i == self.num_epoch or best_value == value:
+                        if i % (endNumEpoch // 5) == 0 or i == endNumEpoch or best_value == value:
                             plt.text(epoch, value, f'{value:.3e}', ha='center', va=('bottom' if idx == 0 else 'top'), fontsize=10)
 
             if [True for values in values_ls if values is not None]:
@@ -65,7 +67,7 @@ class ModelPerform(object):
                 # 標示y軸(labelpad代表與圖片的距離)
                 plt.ylabel(key, fontsize=10)
 
-                graph_path = f'{self.saveDir}/e{self.num_epoch}_{key}.png'
+                graph_path = f'{self.saveDir}/e{endNumEpoch}_{key}.png'
                 plt.savefig(graph_path)
                 if isShow:
                     PILimg.open(graph_path).show()
