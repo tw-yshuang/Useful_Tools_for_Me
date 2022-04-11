@@ -1,7 +1,13 @@
+'''
+    This code edit by YU-SHUN,
+    Welcome to contact me if you have any questions.
+    e-mail: tw.yshuang@gmail.com
+    Github: https://github.com/tw-yshuang
+'''
 def str_format(word: str, style: str = 'default', fore: str = 'default', background: str = 'default'):
     '''Style_table
     ---
-    |顯示方式  |       　 Style      |    variable   |
+    |顯示方式  |         Style      |    variable   |
     |:-------:|:------------------:|:-------------:|
     |0        |       終端默認設置   |      default  |
     |1        |       高亮顯示       |      hight    |
@@ -121,3 +127,28 @@ def spend_time(func):
         return result
 
     return wrap
+
+
+def ask_yn(question, fore: str = 'default'):
+    '''Style_table
+    Color_table
+    ---
+    |Fore   |    顏色   |  variable   |
+    |:-----:|:--------:|:------------:|
+    |30     |    黑色   |   black     |
+    |31     |    紅色   |   r         |
+    |32     |    綠色   |   g         |
+    |33     |    黃色   |   y         |
+    |34     |    藍色   |   b         |
+    |35     |    洋紅   |   pink      |
+    |36     |    青色   |   sky       |
+    |37     |    白色   |   white     |
+    '''
+    reply = input(f"{str_format(question, fore=fore)} [y/n]: ").lower().strip()
+    if reply[0] in ('y', '1') or reply[:] == 'true':
+        return True
+    elif reply[0] in ('n', '0') or reply[:] == 'false':
+        return False
+    else:
+        print(str_format(f"Wrong answer, please enter again.", fore='r'))
+        return ask_yn(question)

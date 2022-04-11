@@ -1,13 +1,18 @@
-import glob
+import os, sys, glob
 from os import walk, mknod
 
+sys.path.append(os.path.abspath(__package__))
+from WordOperator import str_format
+
 '''
-    This code edit by YU-SHUN from NTUT IEM,
-    if have any problem, please contact this e-mail: t105370742@ntut.org.tw.
+    This code edit by YU-SHUN,
+    Welcome to contact me if you have any questions.
+    e-mail: tw.yshuang@gmail.com
+    Github: https://github.com/tw-yshuang
 '''
 
 
-def get_filenames(dir_path: str, specific_name: str, isImported=False) -> list:
+def get_filenames(dir_path: str, specific_name: str, withDirPath=True, isImported=False) -> list:
     '''
     get_filenames
     -----
@@ -43,7 +48,7 @@ def get_filenames(dir_path: str, specific_name: str, isImported=False) -> list:
                         break
                 if check_num == 1:
                     continue
-                filenames.append(filename)
+                filenames.append(filename if withDirPath is True else filename[len(dir_path) :])
 
     return filenames
 
@@ -69,6 +74,18 @@ def write_imported_root_to_txt(filename_root: str) -> None:
         imported_root_info = open("already_imported_root.txt", "a", encoding="utf-8")
         imported_root_info.write(",\n" + str(filename_root))
     imported_root_info.close()
+
+
+def check2create_dir(dir: str):
+    try:
+        if not os.path.exists(dir):
+            os.mkdir(dir)
+            print(str_format(f"Successfully created the directory: {dir}", fore='g'))
+            return False
+        else:
+            return True
+    except OSError:
+        raise OSError(str_format(f"Fail to create the directory {dir} !", fore='r'))
 
 
 if __name__ == "__main__":
