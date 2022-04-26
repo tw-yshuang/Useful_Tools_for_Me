@@ -2,7 +2,7 @@ import os
 from typing import List
 import matplotlib
 import matplotlib.pyplot as plt
-from PIL import Image as PILimg
+from PIL import Image
 
 matplotlib.use('AGG')
 
@@ -70,7 +70,7 @@ class ModelPerform(object):
                 graph_path = f'{self.saveDir}/e{endNumEpoch}_{key}.png'
                 plt.savefig(graph_path)
                 if isShow:
-                    PILimg.open(graph_path).show()
+                    Image.open(graph_path).show()
                 if not isSave:
                     os.remove(graph_path)
 

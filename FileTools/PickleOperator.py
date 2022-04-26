@@ -1,9 +1,9 @@
 import pickle
 
 
-def save_pickle(targect, path: str):
+def save_pickle(target, path: str):
     with open(path, 'wb') as f:
-        pickle.dump(targect, f)
+        pickle.dump(target, f)
 
 
 def load_pickle(path: str):

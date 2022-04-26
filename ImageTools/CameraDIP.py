@@ -77,7 +77,7 @@ class CameraDIP(object):
 
     def show_cap(self, subModule_name=None, isShow=True):
         '''
-        This fuction has no mask, if you want to add mask to generate the frame you make,
+        This function has no mask, if you want to add mask to generate the frame you make,
         you can use variable:
         >>> subModule_name
         to make this happen,

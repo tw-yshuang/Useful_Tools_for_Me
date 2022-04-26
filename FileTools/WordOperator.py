@@ -4,6 +4,8 @@
     e-mail: tw.yshuang@gmail.com
     Github: https://github.com/tw-yshuang
 '''
+
+
 def str_format(word: str, style: str = 'default', fore: str = 'default', background: str = 'default'):
     '''Style_table
     ---
@@ -16,7 +18,7 @@ def str_format(word: str, style: str = 'default', fore: str = 'default', backgro
     |4        |       使用下劃線     |      line     |
     |24       |       刪去下劃線     |      unline   |
     |5        |       閃爍          |     blink     |
-    |25       |       去閃爍        |     unblnk    |
+    |25       |       去閃爍        |     unblink    |
     |7        |       反白顯示       |      negative |
     |27       |       非反顯        |     unnegative|
     |8        |       不可見        |     blank     |
@@ -44,7 +46,7 @@ def str_format(word: str, style: str = 'default', fore: str = 'default', backgro
         'line': 4,
         'unline': 24,
         'blink': 5,
-        'unblnk': 25,
+        'unblink': 25,
         'negative': 7,
         'unnegative': 27,
         'blank': 8,
@@ -86,7 +88,7 @@ def str_format(word: str, style: str = 'default', fore: str = 'default', backgro
 
     error_msg = ''
     for error in error_ls:
-        error_msg += f"Worng {error} parameter!! Use default parameter for {error}.\n"
+        error_msg += f"Wrong {error} parameter!! Use default parameter for {error}.\n"
 
     if error_msg != '':
         print(str_format(error_msg, fore='r'))

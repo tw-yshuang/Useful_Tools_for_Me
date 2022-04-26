@@ -54,9 +54,9 @@ def calc_contour_feature(contours):
         bbox2 = cv2.minAreaRect(cont)
         circle = cv2.minEnclosingCircle(cont)
         if len(cont) > 5:
-            ellipes = cv2.fitEllipse(cont)
+            ellipse = cv2.fitEllipse(cont)
         else:
-            ellipes = None
+            ellipse = None
         M = cv2.moments(cont)  # return all moment of given contour
         if area != 0:  # same as M["m00"] !=0
             cx = int(M["m10"] / M["m00"])
@@ -64,7 +64,7 @@ def calc_contour_feature(contours):
             center = (cx, cy)
         else:
             center = (None, None)
-        feature = [center, area, perimeter, bbox, bbox2, circle, ellipes]
+        feature = [center, area, perimeter, bbox, bbox2, circle, ellipse]
         feature_list.append(feature)
 
     return feature_list
@@ -72,7 +72,7 @@ def calc_contour_feature(contours):
 
 def draw_center(img, feature_list, color=(255, 255, 255), radius=5, isShow=True):
     img_center = img.copy()
-    for f in feature_list:  # center is fearue[0]
+    for f in feature_list:  # center is feature[0]
         if f[0][0] is not None:
             img_center = cv2.circle(img_center, f[0], radius, color, -1)  # -1 filled
             if isShow:
@@ -83,7 +83,7 @@ def draw_center(img, feature_list, color=(255, 255, 255), radius=5, isShow=True)
 
 def draw_bbox(img, feature_list, color=(0, 255, 0), width=2, isShow=True):
     img_bbox = img.copy()
-    for f in feature_list:  # center is fearue[0]
+    for f in feature_list:  # center is feature[0]
         (x, y, w, h) = f[3]
         img_bbox = cv2.rectangle(img_bbox, (x, y), (x + w, y + h), color, width)  # -1 filled
 
@@ -129,7 +129,7 @@ def get_crop_img_list(img, feature_list, extra_W=0, extra_H=0, isShow=False):
 
 def draw_bbox2(img, feature_list, color=(0, 255, 0), width=2, isShow=True):
     img_bbox2 = img.copy()
-    for f in feature_list:  # center is fearue[0]
+    for f in feature_list:  # center is feature[0]
         box = np.int0(cv2.boxPoints(f[4]))  # –> int0會省略小數點後方的數字
         img_bbox = cv2.drawContours(img_bbox2, [box], -1, color, width)
     if isShow:
@@ -140,7 +140,7 @@ def draw_bbox2(img, feature_list, color=(0, 255, 0), width=2, isShow=True):
 
 def draw_minSCircle(img, feature_list, color=(0, 255, 0), width=2, isShow=True):
     img_circle = img.copy()
-    for f in feature_list:  # center is fearue[0]
+    for f in feature_list:  # center is feature[0]
         ((x, y), radius) = f[5]  # –> int0會省略小數點後方的數字
         img_circle = cv2.circle(img_circle, (int(x), int(y)), int(radius), color, width)
     if isShow:
@@ -199,16 +199,16 @@ def get_signature_info(contours, center, isShow=False):
                 break
 
     center_dist_infos = {}
-    vecter_0 = np.array([points[start_point, 0] - cX, 0])
+    vector_0 = np.array([points[start_point, 0] - cX, 0])
     for i in range(points.shape[0]):
         pX = points[i, 0]
         pY = points[i, 1]
 
         center_dist = (abs(cX - pX) ** 2 + abs(cY - pY) ** 2) ** (1 / 2)
-        vecter_a = np.array([points[i, 0] - cX, cY - points[i, 1]])
+        vector_a = np.array([points[i, 0] - cX, cY - points[i, 1]])
 
-        # theta = np.degrees(np.arccos((vecter_0 - vecter_a) / vecter_0[0] * center_dist)) 錯的？？？
-        theta = np.degrees(np.arccos(np.dot(vecter_0, vecter_a) / (vecter_0[0] * center_dist)))
+        # theta = np.degrees(np.arccos((vector_0 - vector_a) / vector_0[0] * center_dist)) 錯的？？？
+        theta = np.degrees(np.arccos(np.dot(vector_0, vector_a) / (vector_0[0] * center_dist)))
         if pY > cY:
             theta = 360 - theta
 

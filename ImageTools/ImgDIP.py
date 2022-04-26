@@ -12,7 +12,7 @@ class ImgDIP(object):
         if img is None and img_path is not None:
             self.img = cv2.imread(img_path)
         elif img is None:
-            print("Error, this class need to choise img or img_path to import")
+            print("Error, this class need to choice img or img_path to import")
 
         self.img = img
         self.img_hsv = cv2.cvtColor(img, cv2.COLOR_BGR2HSV)
@@ -108,7 +108,7 @@ def get_biggest_countour(img, isShow=False):
     return biggest_contour
 
 
-def remove_img_nosie(img, contours, isShow=False):
+def remove_img_noise(img, contours, isShow=False):
     '''
     Only save contours part, else place become back.
     ===
@@ -121,7 +121,7 @@ def remove_img_nosie(img, contours, isShow=False):
     crop_img = cv2.bitwise_and(img, crop_img)
 
     if isShow is True:
-        cv2.imshow('remove_img_nosie', crop_img)
+        cv2.imshow('remove_img_noise', crop_img)
         # cv2.waitKey(0)
         if cv2.waitKey(1) & 0xFF == ord('q'):
             pass
@@ -137,7 +137,7 @@ def get_filter_img(img, kernel='laplace', isShow=False):
                         [-1, -1, -1]])
 
     Let img smoothing can use "mean" kernel,
-    >>>　kernel = np.array([[1, 1, 1],
+    >>> kernel = np.array([[1, 1, 1],
                        [1, 1, 1],
                        [1, 1, 1]])
     '''

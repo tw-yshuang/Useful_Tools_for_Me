@@ -54,16 +54,16 @@ def get_signature_info(contours, center, isShow=False):
                 break
 
     center_dist_infos = {}
-    vecter_0 = np.array([points[start_point, 0] - cX, 0])
+    vector_0 = np.array([points[start_point, 0] - cX, 0])
     for i in range(points.shape[0]):
         pX = points[i, 0]
         pY = points[i, 1]
 
         center_dist = (abs(cX - pX) ** 2 + abs(cY - pY) ** 2) ** (1 / 2)
-        vecter_a = np.array([points[i, 0] - cX, cY - points[i, 1]])
+        vector_a = np.array([points[i, 0] - cX, cY - points[i, 1]])
 
-        # theta = np.degrees(np.arccos((vecter_0 - vecter_a) / vecter_0[0] * center_dist)) 錯的？？？
-        theta = np.degrees(np.arccos(np.dot(vecter_0, vecter_a) / (vecter_0[0] * center_dist)))
+        # theta = np.degrees(np.arccos((vector_0 - vector_a) / vector_0[0] * center_dist)) 錯的？？？
+        theta = np.degrees(np.arccos(np.dot(vector_0, vector_a) / (vector_0[0] * center_dist)))
         if pY > cY:
             theta = 360 - theta
 
