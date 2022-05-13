@@ -1,8 +1,7 @@
 import os, sys, glob
-from os import walk, mknod
+from os import walk
 
-sys.path.append(os.path.abspath(__package__))
-from .WordOperator import str_format
+from WordOperator import str_format
 
 '''
     This code edit by YU-SHUN,
