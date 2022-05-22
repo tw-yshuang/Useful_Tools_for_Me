@@ -67,6 +67,8 @@ class ModelPerform(object):
                 # 標示y軸(labelpad代表與圖片的距離)
                 plt.ylabel(key, fontsize=10)
 
+                plt.legend(['Train', 'Val'])
+
                 graph_path = f'{self.saveDir}/e{endNumEpoch}_{key}.png'
                 plt.savefig(graph_path)
                 if isShow:
