@@ -96,12 +96,25 @@ def str_format(word: str, style: str = 'default', fore: str = 'default', backgro
     return f'\033[{word_setting}{word}\033[0m'
 
 
-def replace_keyword(filename: str, target_word: str, replace_word: str):
-    new_f = ''
-    with open(filename, 'r') as f:
-        new_f = f.read().replace(target_word, replace_word)
-    with open(filename, 'w') as f:
-        f.write(new_f)
+def replace_keyword(filename: str, target_word: str, replace_word: str, isRegular=True):
+    import re
+
+    if isRegular:
+        target_word = r'.*'.join(target_word.split('*'))
+
+    # read and replace
+    with open(filename, 'r') as fd:
+        # sample case-insensitive find-and-replace
+        text, counter = re.subn(target_word, replace_word, fd.read(), re.I)
+
+    # check if there is at least a  match
+    if counter > 0:
+        # edit the file
+        with open(filename, 'w') as fd:
+            fd.write(text)
+
+    # summary result
+    print(f'{counter} occurrence of "{target_word}" were replaced with "{replace_word}".')
 
 
 def find_keyword(filename: str, keyword: str):
