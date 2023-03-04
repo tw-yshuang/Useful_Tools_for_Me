@@ -20,7 +20,7 @@ def get_filenames(dir_path: str, specific_name: str, withDirPath=True) -> list:
         >>> Can type any word or extension.
         e.g. '*cat*', '*.csv', '*cat*.csv',
     '''
-    filenames = []
+
     if dir_path[-1] != '/':
         dir_path += '/'
 
