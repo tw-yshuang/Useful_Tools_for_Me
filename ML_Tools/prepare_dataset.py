@@ -1,5 +1,5 @@
 import os, shutil
-from FileTools.FileSearcher import check2create_dir, get_filenames
+from FileTools.FileOperator import check2create_dir, get_filenames
 from FileTools.WordOperator import replace_keyword
 
 
