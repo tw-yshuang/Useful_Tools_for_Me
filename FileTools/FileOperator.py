@@ -7,11 +7,12 @@
 
 import os, glob
 import subprocess
+from typing import List
 
 from WordOperator import str_format
 
 
-def get_filenames(dir_path: str, specific_name: str, withDirPath=True) -> list:
+def get_filenames(dir_path: str, specific_name: str, withDirPath=True) -> List[str]:
     '''
     get_filenames
     -----
